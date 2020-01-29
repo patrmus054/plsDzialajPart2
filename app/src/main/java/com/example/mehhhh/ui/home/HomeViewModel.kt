@@ -1,4 +1,4 @@
-package com.example.mehhhh.ui.search
+package com.example.mehhhh.ui.home
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -8,14 +8,13 @@ import com.example.mehhhh.Repository
 import com.example.mehhhh.local.LocalDataSource
 import com.example.mehhhh.remote.RemoteDataSource
 import com.example.mehhhh.remote.Result
+import com.example.mehhhh.remote.TMDBResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
-class SearchViewModel : ViewModel() {
-
-
+class HomeViewModel: ViewModel() {
     companion object{
         var isInternet: Boolean = true
     }
@@ -25,11 +24,9 @@ class SearchViewModel : ViewModel() {
         viewModelJob + Dispatchers.Main )
 
 
-    var _item: MutableLiveData<List<Result>>
-    init {
-        _item = MutableLiveData()
-    }
-    val item:LiveData<List<Result>>
+    private var _item: MutableLiveData<List<TMDBResult>> = MutableLiveData()
+
+    val item: LiveData<List<TMDBResult>>
         get() = _item
 
 
@@ -37,13 +34,13 @@ class SearchViewModel : ViewModel() {
     fun getAllMeals(){
         coroutineScope.launch {
             Log.e("myapp","weszlo")
-            val result = getData().getAllMeals()
+            val result = getData().getSingleTMDBMeal()[0].meals
+            Log.w("HomeViewModel", result[0].strMeal)
             _item.value = result
         }
     }
 
-    fun getData(): Repository = if (isInternet) Repository(RemoteDataSource()) else Repository(
-        LocalDataSource()
-    )
+
+    fun getData(): Repository = if (isInternet) Repository( RemoteDataSource()) else Repository(  LocalDataSource()  )
 
 }

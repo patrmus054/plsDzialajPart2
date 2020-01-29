@@ -1,4 +1,4 @@
-package com.example.mehhhh.ui.search
+package com.example.mehhhh.ui.home
 
 import android.os.Bundle
 import android.util.Log
@@ -9,52 +9,48 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.mehhhh.Model
 import com.example.mehhhh.R
-import com.example.mehhhh.remote.MealService
 import com.example.mehhhh.remote.Result
+import com.example.mehhhh.remote.TMDBResult
+import com.example.mehhhh.ui.search.ListAdapter
+import com.example.mehhhh.ui.search.ListAdapterV2
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_search.*
 
-class SearchFragment : Fragment() {
+
+class HomeFragment : Fragment() {
 
     companion object{
-        fun newInstance(): SearchFragment = SearchFragment()
+        fun newInstance(): HomeFragment = HomeFragment()
     }
 
-    lateinit var listAdapter: ListAdapterV2
-
+    lateinit var listAdapter: com.example.mehhhh.ui.search.ListAdapter
     var mMealList: List<Result>? = null
-    private lateinit var searchViewModel: SearchViewModel
+    private lateinit var homeViewModel: HomeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
     }
 
-
-    override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?, savedInstanceState: Bundle?):
-            View? {searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-        val root = inflater.inflate(R.layout.fragment_search, container, false)
-
-        return root
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        homeViewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         super.onViewCreated(view, savedInstanceState)
         mMealList = mutableListOf()
-        listAdapter = ListAdapterV2(mMealList as MutableList<Result>)
-        search_list_recycler_view.apply {
+        listAdapter = ListAdapter(mMealList as MutableList<TMDBResult>)
+        home_recycler_view.apply {
             layoutManager = LinearLayoutManager(activity)
             adapter = listAdapter
         }
-        searchViewModel.item.observe(this, Observer {
-            Log.e("myapp","Working...")
+        homeViewModel.item.observe(this, Observer {
             listAdapter.setList(it)
         })
-        searchViewModel.getAllMeals()
+        homeViewModel.getAllMeals()
     }
-
-
 
 }

@@ -8,30 +8,29 @@ import com.example.mehhhh.R
 import com.example.mehhhh.remote.Result
 import com.example.mehhhh.remote.TMDBResult
 
-class ListAdapter(private val list: MutableList<TMDBResult>)
-    : RecyclerView.Adapter<BaseViewHolder>() {
+class ListAdapterV2(private val list: MutableList<Result>)
+    : RecyclerView.Adapter<BaseViewHolderV2>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolderV2 {
         val inflater = LayoutInflater.from(parent.context)
-        return BaseViewHolder(inflater, parent)
+        return BaseViewHolderV2(inflater, parent)
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
-        val meal: TMDBResult = list[position]
+    override fun onBindViewHolder(holder: BaseViewHolderV2, position: Int) {
+        val meal: Result = list[position]
         holder.bind(meal)
     }
 
     override fun getItemCount(): Int = list.size
 
-    fun setList(newlist: List<TMDBResult>){
+    fun setList(newlist: List<Result>){
         list.clear()
         list.addAll(newlist)
         notifyDataSetChanged()
     }
-
 }
 
-class BaseViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
+class BaseViewHolderV2(inflater: LayoutInflater, parent: ViewGroup) :
     RecyclerView.ViewHolder(inflater.inflate(R.layout.search_item, parent, false)) {
     private var mTitleView: TextView? = null
     private var mIngredientView: TextView? = null
@@ -42,8 +41,8 @@ class BaseViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         mIngredientView = itemView.findViewById(R.id.tv_search_not_possessed_ingredients)
     }
 
-    fun bind(meal: TMDBResult) {
-        mTitleView?.text = meal.strMeal
-        mIngredientView?.text = meal.strIngredient1
+    fun bind(meal: Result) {
+        mTitleView?.text = meal.name
+        mIngredientView?.text = meal.ingredients
     }
 }
