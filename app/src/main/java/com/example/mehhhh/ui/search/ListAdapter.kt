@@ -9,7 +9,7 @@ import com.example.mehhhh.Model
 import com.example.mehhhh.R
 import com.example.mehhhh.remote.Result
 
-class ListAdapter(private val list: List<Result>)
+class ListAdapter(private val list: MutableList<Result>)
     : RecyclerView.Adapter<SearchViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
@@ -23,6 +23,12 @@ class ListAdapter(private val list: List<Result>)
     }
 
     override fun getItemCount(): Int = list.size
+
+    fun setList(newlist: List<Result>){
+        list.clear()
+        list.addAll(newlist)
+        notifyDataSetChanged()
+    }
 
 }
 
@@ -41,5 +47,4 @@ class SearchViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         mTitleView?.text = meal.name
         mIngredientView?.text = meal.ingredients
     }
-
 }

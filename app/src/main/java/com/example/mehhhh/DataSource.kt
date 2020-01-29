@@ -4,10 +4,10 @@ import com.example.mehhhh.remote.Result
 
 interface DataSource {
 
-    fun getAllMeals(): List<Result>
-    fun getMealsByName(name: String): List<Result>
-    fun getMealsByIngredient(ingredient: String): List<Result>
-    fun getMealsByIngredientAndName(name: String, ingredient: String): List<Result>
-    fun refreshNews()
+    suspend fun getAllMeals(): List<Result>
+    suspend fun getMealsByName(name: String): List<Result>
+    suspend fun getMealsByIngredient(ingredient: String): List<Result>
+    suspend fun getMealsByIngredientAndName(name: String, ingredient: String): List<Result>
+    suspend fun refreshNews()
 
 }

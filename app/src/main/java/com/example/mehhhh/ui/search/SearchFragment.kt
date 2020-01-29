@@ -1,6 +1,7 @@
 package com.example.mehhhh.ui.search
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +22,8 @@ class SearchFragment : Fragment() {
     companion object{
         fun newInstance(): SearchFragment = SearchFragment()
     }
+
+    lateinit var listAdapter: com.example.mehhhh.ui.search.ListAdapter
 
     var mMealList: List<Result>? = null
     private lateinit var searchViewModel: SearchViewModel
@@ -60,22 +63,33 @@ class SearchFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater,container: ViewGroup?, savedInstanceState: Bundle?):
             View? {searchViewModel = ViewModelProviders.of(this).get(SearchViewModel::class.java)
-
         val root = inflater.inflate(R.layout.fragment_search, container, false)
-//        val textView: TextView = root.findViewById(R.id.text_search)
-//        searchViewModel.text.observe(this, Observer {
-//            textView.text = it
-//        })
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mMealList = mutableListOf()
+        listAdapter = ListAdapter(mMealList as MutableList<Result>)
         list_recycler_view.apply {
-            mMealList = searchViewModel.getData().getAllMeals()
+
+
+
             layoutManager = LinearLayoutManager(activity)
-            adapter = mMealList?.let { ListAdapter(it) }
+            adapter = listAdapter
         }
+        searchViewModel.item.observe(this, Observer {
+            Log.e("myapp","Working...")
+            listAdapter.setList(it)
+        })
+        searchViewModel.getAllMeals()
+//        searchViewModel.getAllMeals()
+//        list_recycler_view.apply {
+//            mMealList = searchViewModel.getData().getAllMeals()
+//            layoutManager = LinearLayoutManager(activity)
+//            adapter = mMealList?.let { ListAdapter(it) }
+//        }
     }
 
 
